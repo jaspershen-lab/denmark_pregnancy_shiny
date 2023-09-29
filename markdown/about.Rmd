@@ -1,0 +1,16 @@
+---
+title: "About the Project"
+output: html_document
+---
+
+## Project Description
+
+This project aims to visualize the changes in molecules during human pregnancy. Using data from several participants, we track molecular changes throughout different stages of pregnancy.
+
+The interactive visualizations provide insights into how these molecules behave and change over time, shedding light on the intricate processes of human pregnancy.
+
+![](figure1.png)
+
+The interactive visualizations provide insights into how these molecules behave and change over time, shedding light on the intricate processes of human pregnancy.
+
+![](figure2.png)

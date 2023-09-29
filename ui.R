@@ -6,6 +6,7 @@ library(ggplot2)
 library(dplyr)
 library(RColorBrewer)
 library(plotly)
+library(DT)
 
 
 # UI
@@ -21,35 +22,36 @@ ui <- dashboardPage(
     menuItem("Authors", tabName = "authors", icon = icon("users"))
   )),
   dashboardBody(
-    tags$head(
-      tags$style(HTML("
+    tags$head(tags$style(
+      HTML(
+        "
                 /* Change the background color of the header */
                 .skin-blue .main-header .navbar,
                 .skin-blue .main-header .logo {
                     background-color: #00458A;  /* NTU Blue */
                     border-bottom-color: #8E0C3A;  /* NTU Red */
                 }
-        
+
                 /* Change the hover color of the sidebar menu */
                 .skin-blue .sidebar-menu > li:hover > a,
                 .skin-blue .sidebar-menu > li.active > a {
                     border-left-color: #8E0C3A;  /* NTU Red */
                 }
-        
+
                 /* Other custom styles can be added as needed */
-            "))
-    ),
+            "
+      )
+    )),
     tabItems(
       # About tab
-      tabItem(
-        tabName = "about",
-        uiOutput("aboutContent")
-      ),
+      tabItem(tabName = "about",
+              uiOutput("aboutContent")),
       # Data Visualization tab
       tabItem(tabName = "viz",
               fluidRow(column(
                 width = 12,
                 box(plotlyOutput("lineChart"), width = 12),
+                box(DTOutput("moleculeInfoTable"), width = 12),
                 box(
                   title = "",
                   fluidRow(
@@ -65,24 +67,28 @@ ui <- dashboardPage(
                     ),
                     column(
                       4,
-                      selectInput("moleculeType", "Molecule Type:", choices = names(molecule_choices))
+                      selectInput(
+                        inputId = "moleculeType",
+                        label = "Molecule class:",
+                        choices = names(molecule_choices),
+                        selected = "Protein"
+                      ),
                     ),
                     column(
                       4,
                       selectInput(
-                        "molecule",
-                        "Molecule:",
-                        choices = molecule_choices$Proteins,
-                        selected = molecule_choices$Proteins[1]
+                        inputId = "molecule",
+                        label = "Molecule:",
+                        choices = molecule_choices$Protein,
+                        selected = molecule_choices$Protein[1]
                       )
                     )
                   ),
-                  fluidRow(column(
-                    3, checkboxInput("smooth", "Smooth lines?", FALSE)
+                  fluidRow(
+                    column(4, checkboxInput("smooth", "Smooth lines?", FALSE)),
+                    column(4, checkboxInput("smooth_one", "Only one smoothed line?", FALSE)),
+                    column(4, checkboxInput("points", "Show points?", FALSE))
                   ),
-                  column(
-                    3, checkboxInput("points", "Show points?", FALSE)
-                  )),
                   fluidRow(
                     column(3, downloadButton("downloadPlot", "Download Plot")),
                     column(
@@ -114,8 +120,7 @@ ui <- dashboardPage(
               ))),
       # Authors tab
       tabItem(tabName = "authors",
-              uiOutput("authorContent")
-      )
+              uiOutput("authorContent"))
     ),
     tags$head(tags$style(
       HTML(
