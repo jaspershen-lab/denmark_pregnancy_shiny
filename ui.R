@@ -1,3 +1,4 @@
+
 # Required Libraries
 # install.packages(c("shiny", "shinydashboard", "ggplot2", "dplyr", "RColorBrewer", "plotly"))
 library(shiny)
@@ -7,6 +8,42 @@ library(dplyr)
 library(RColorBrewer)
 library(plotly)
 library(DT)
+
+# load data
+# set.seed(123)
+# participants <- c("All participants", paste0("Participant_", 1:40))
+# data <- expand.grid(Weeks = 1:40, Participant = participants[-1])
+# data$Progesterone <- rnorm(nrow(data), 50, 10)
+# data$Estrogen <- rnorm(nrow(data), 100, 20)
+# data$HCG <- rnorm(nrow(data), 2000, 500)
+#
+# # Add correlation and recovery score to the simulated dataset
+# data$Correlation <-
+#   runif(nrow(data), -1, 1) # Random values between -1 and 1
+# data$Recovery_Score <-
+#   runif(nrow(data), 0, 100) # Random values between 0 and 100
+#
+# data$PValue <- rep(0.000001, nrow(data))
+
+load("data/denmark_data2")
+
+denmark_data <-
+  denmark_data2
+
+participants <- c("All participants", unique(denmark_data$subject_id2))
+
+# Define molecule types and associated molecules outside the server
+molecule_choices <- list(RNA = unique(denmark_data$Molecular_name[denmark_data$class == "RNA"]),
+                         Protein = unique(denmark_data$Molecular_name[denmark_data$class == "Protein"]),
+                         Metabolite = unique(denmark_data$Molecular_name[denmark_data$class == "Metabolite"]),
+                         Cytokine = unique(denmark_data$Molecular_name[denmark_data$class == "Cytokine"]))
+
+
+subject_color <-
+  colorRampPalette(colors = RColorBrewer::brewer.pal(11, name = "BrBG"))(n = length(unique(denmark_data$subject_id2)))
+
+names(subject_color) <-
+  stringr::str_sort(unique(denmark_data$subject_id2), numeric = TRUE)
 
 
 # UI
@@ -85,9 +122,9 @@ ui <- dashboardPage(
                     )
                   ),
                   fluidRow(
-                    column(4, checkboxInput("smooth", "Smooth lines?", FALSE)),
-                    column(4, checkboxInput("smooth_one", "Only one smoothed line?", FALSE)),
-                    column(4, checkboxInput("points", "Show points?", FALSE))
+                    column(4, checkboxInput("smooth", "Smooth lines?", TRUE)),
+                    column(4, checkboxInput("smooth_one", "Only one smoothed line?", TRUE)),
+                    column(4, checkboxInput("points", "Show points?", TRUE))
                   ),
                   fluidRow(
                     column(3, downloadButton("downloadPlot", "Download Plot")),

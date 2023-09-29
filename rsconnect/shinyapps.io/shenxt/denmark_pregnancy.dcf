@@ -1,0 +1,13 @@
+name: denmark_pregnancy
+title: denmark_pregnancy
+username: shenxt
+account: shenxt
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 10030743
+bundleId: 7742121
+url: https://shenxt.shinyapps.io/denmark_pregnancy/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: data/denmark_data|data_preparation.R
