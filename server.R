@@ -1,14 +1,4 @@
 
-# Required Libraries
-# install.packages(c("shiny", "shinydashboard", "ggplot2", "dplyr", "RColorBrewer", "plotly"))
-library(shiny)
-library(shinydashboard)
-library(ggplot2)
-library(dplyr)
-library(RColorBrewer)
-library(plotly)
-library(DT)
-
 # load data
 # set.seed(123)
 # participants <- c("All participants", paste0("Participant_", 1:40))
